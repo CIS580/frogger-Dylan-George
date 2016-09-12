@@ -12,21 +12,21 @@ You may use the art provided, or your own.  Additionally, you do not need to mak
 
 2. Movement for the player should proceed in fixed increments, i.e. 'hopping', rather than 'walking'. Pushing the forward button should start a hop, which is then interpolated over several frames before a landing.  While hopping, the player cannot change the action their sprite is taking (10 points).
 
-4. Multiple obstacles appear in the game, and move vertically.  Obstacles are implemented as classes in their own modules (10 points).
+3. Multiple obstacles appear in the game, and move vertically.  Obstacles are implemented as classes in their own modules (10 points).
 
-5. A background appropriate to the game is provided, with clear cues to where obstacles will appear (i.e. cars appear on a road, logs in a river) (10 points).
+4. A background appropriate to the game is provided, with clear cues to where obstacles will appear (i.e. cars appear on a road, logs in a river) (10 points).
 
-6. Some obstacles, i.e. cars, kill the player sprite when collided with (10 points).
+5. Some obstacles, i.e. cars, kill the player sprite when collided with (10 points).
 
-7. Other obstacles (i.e. logs, which keep the frog protagonist from drowning), are necessary to collide with (10 points).
+6. Other obstacles (i.e. logs, which keep the frog protagonist from drowning), are necessary to collide with (10 points).
 
-8. The player begins with three lives.  Dying restarts the player at the beginning with one less life (10 points).
+7. The player begins with three lives.  Dying restarts the player at the beginning with one less life (10 points).
 
-9. The player's score and level is displayed on the game screen in some fashion - either through the _drawText()_ method or via an HTML element overlayed on the game screen (10 points).
+8. The player's score and level is displayed on the game screen in some fashion - either through the _drawText()_ method or via an HTML element overlayed on the game screen (10 points).
 
-10. Instructions on how to play the game appear in some easily-accessible fashion, i.e. on the page, or over the game screen accessed with the _esc_ key (10 points).
+9. Instructions on how to play the game appear in some easily-accessible fashion, i.e. on the page, or over the game screen accessed with the _esc_ key (10 points).
 
-10. Reaching the far side of the screen awards the player with points, advances the level, and restarts the player at the initial point with the obstacles moving faster.
+10. Reaching the far side of the screen awards the player with points, advances the level, and restarts the player at the initial point with the obstacles moving faster (10 points).
 
 ### Extra Credit
 
@@ -64,4 +64,4 @@ Mini and Sports Car art was provided by  [bahi](http://opengameart.org/users/bah
 
 Sedan and Pickup art was provided by  [bahi](http://opengameart.org/users/bahi) of [Open Game Art](http://opengameart.org) under a CC-BY license.
 
-Game framework HTML5/CSS3/Javascript code was written by course instructor Nathan Bean, and also released under the [CC-A-SA 3.0 License](https://creativecommons.org/licenses/by-sa/3.0/)
+Game framework HTML5/CSS3/Javascript code was written by course instructor Nathan Bean, and released under a CC-BY license.
