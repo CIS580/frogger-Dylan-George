@@ -1,7 +1,7 @@
 "use strict";
 
-const MS_PER_FRAME = 1000/8;
-
+const MS_PER_FRAME = 1000/16;
+const BLINK_MS_PER_FRAME = 1000/4;
 /**
  * @module exports the Player class
  */
@@ -19,18 +19,22 @@ function Player(position) {
 	this.width  = 64;
 	this.height = 64;
 	this.spritesheet  = new Image();
-	this.spritesheet.src = encodeURI('assets/PlayerSprite2.png');
+	this.spritesheet.src = encodeURI('assets/frog_spritesheet.png');
 	this.timer = 0;
 	this.frame = 0;
 
 	
 	this.speed = 4;
-	this.moveTimer = 0;
-	this.moveDelayTime = 150;
+	this.moveTimer = 0;	
+	this.moveDelayTime = 150;	
 	//Is it finishing a hop
 	this.stillMoving = false;
 	//Is it hopping again
 	this.movingAgain = false;
+	//Vars to make blink animation independent 
+	this.blinkDelay = 0;
+	this.blinkTimer = 0;
+	this.blinkFrame = 0;
 	
 	//Which direction is it hopping
 	this.currentDirection = 
@@ -154,39 +158,54 @@ function Player(position) {
  * {DOMHighResTimeStamp} time the elapsed time since the last frame
  */
 Player.prototype.update = function(time) {
+
+
   switch(this.state) {
     case "idle":
 		if(this.movingAgain) this.state = "moving";
-      /*this.timer += time;
-      if(this.timer > MS_PER_FRAME) {
-        this.timer = 0;
-        this.frame += 1;
-        if(this.frame > 3) this.frame = 0;
-      } */
-      break;
-	case "moving":
-		this.timer += time;
-		this.moveTimer += time;
-		if(this.timer > MS_PER_FRAME) {
-			this.timer = 0;
-			this.frame += 1;
-			if(this.frame > 3) this.frame = 0;
+		else
+		{
+			this.blinkDelay+=time;
+			if (this.blinkDelay>3000)
+			{
+				this.blinkTimer += time;
+				if(this.blinkTimer > BLINK_MS_PER_FRAME) {
+					console.log(this.blinkFrame);
+					this.blinkTimer = 0;
+					this.blinkFrame += 1;
+					if(this.blinkFrame > 3) 
+					{
+						this.blinkFrame = 0;
+						this.blinkDelay = 0;
+					}
+				}
+			}
 		}
+		break;
+	case "moving":
+		this.moveTimer += time;
 		
 		if(this.moveTimer <= 1000/this.speed)
 		{
+		    this.timer += time;
+			if(this.timer > MS_PER_FRAME) {
+				this.timer = 0;
+				this.frame += 1;
+				if(this.frame > 3) this.frame = 0;
+			}
 			if(this.currentDirection.up) this.y -= this.speed * this.height * time/1000;
 			else if(this.currentDirection.down) this.y += this.speed * this.height * time/1000;
 			else if(this.currentDirection.right) this.x += this.speed * this.width * time/1000;
 			else if(this.currentDirection.left) this.x -=  this.speed * this.width * time/1000;
 		}
-		else if (this.moveTimer < (1000/this.speed) + this.moveDelayTime);
+		else if (this.moveTimer < (1000/this.speed) + this.moveDelayTime) this.frame = 0;
 		else 
 		{	
-
 			this.stillMoving = false;			
 			this.moveTimer = 0;
 			this.state = "idle";
+			this.timer = 0;
+			
 			this.currentDirection.up = this.nextDirection.up;
 			this.currentDirection.down = this.nextDirection.down;
 			this.currentDirection.left = this.nextDirection.left;
@@ -205,23 +224,24 @@ Player.prototype.update = function(time) {
  * {CanvasRenderingContext2D} ctx the context to render into
  */
 Player.prototype.render = function(time, ctx) {
+
   switch(this.state) {
     case "idle":
-      ctx.drawImage(
-        // image
-        this.spritesheet,
-        // source rectangle
-        this.frame * 64, 64, this.width, this.height,
-        // destination rectangle
-        this.x, this.y, this.width, this.height
-      );
-      break;
+		ctx.drawImage(
+		// image
+		this.spritesheet,
+		// source rectangle
+		this.blinkFrame * 64, 64, this.width, this.height,
+		// destination rectangle
+		this.x, this.y, this.width, this.height
+		);
+		break;
 	case "moving":
 		ctx.drawImage(
         // image
         this.spritesheet,
         // source rectangle
-        this.frame * 64, 64, this.width, this.height,
+		this.frame * 64, 0, this.width, this.height,
         // destination rectangle
         this.x, this.y, this.width, this.height
       );

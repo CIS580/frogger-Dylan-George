@@ -16,6 +16,9 @@ function Game(screen, updateFunction, renderFunction) {
   this.update = updateFunction;
   this.render = renderFunction;
 
+  this.background = new Image();
+  this.background.src = 'assets/background.png';
+  
   // Set up buffers
   this.frontBuffer = screen;
   this.frontCtx = screen.getContext('2d');

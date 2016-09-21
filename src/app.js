@@ -7,7 +7,7 @@ const Player = require('./player.js');
 /* Global variables */
 var canvas = document.getElementById('screen');
 var game = new Game(canvas, update, render);
-var player = new Player({x: 0, y: 240})
+var player = new Player({x: 0, y: canvas.height/2 - 32})
 
 /**
  * @function masterLoop
@@ -42,7 +42,6 @@ function update(elapsedTime) {
   * @param {CanvasRenderingContext2D} ctx the context to render to
   */
 function render(elapsedTime, ctx) {
-  ctx.fillStyle = "lightblue";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.drawImage(game.background, 0, 0);
   player.render(elapsedTime, ctx);
 }
