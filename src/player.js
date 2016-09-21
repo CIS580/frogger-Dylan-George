@@ -19,7 +19,7 @@ function Player(position) {
 	this.width  = 64;
 	this.height = 64;
 	this.spritesheet  = new Image();
-	this.spritesheet.src = encodeURI('assets/frog_spritesheet.png');
+	this.spritesheet.src = 'assets/frog_spritesheet.png';
 	this.timer = 0;
 	this.frame = 0;
 
@@ -170,7 +170,6 @@ Player.prototype.update = function(time) {
 			{
 				this.blinkTimer += time;
 				if(this.blinkTimer > BLINK_MS_PER_FRAME) {
-					console.log(this.blinkFrame);
 					this.blinkTimer = 0;
 					this.blinkFrame += 1;
 					if(this.blinkFrame > 3) 

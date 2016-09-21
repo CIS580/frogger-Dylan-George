@@ -3,11 +3,18 @@
 /* Classes */
 const Game = require('./game.js');
 const Player = require('./player.js');
+const Semi = require('./semi.js');
 
 /* Global variables */
 var canvas = document.getElementById('screen');
 var game = new Game(canvas, update, render);
 var player = new Player({x: 0, y: canvas.height/2 - 32})
+
+var semis = [];
+var semi_timer = 0;
+var semi_rate = 200;
+
+//Need to initially place several vehicles in game
 
 /**
  * @function masterLoop
@@ -30,7 +37,18 @@ masterLoop(performance.now());
  * the number of milliseconds passed since the last frame.
  */
 function update(elapsedTime) {
-  player.update(elapsedTime);
+	semi_timer++;
+
+	if(semi_timer > semi_rate)
+	{
+		semi_timer = 0;
+		var semi = new Semi({x: 64, y: -192, direction: 1});
+		semis.push(semi);
+	}
+	player.update(elapsedTime);
+	semis.forEach(function(semi) {
+    semi.update(elapsedTime);
+	});
   // TODO: Update the game objects
 }
 
@@ -42,6 +60,9 @@ function update(elapsedTime) {
   * @param {CanvasRenderingContext2D} ctx the context to render to
   */
 function render(elapsedTime, ctx) {
-  ctx.drawImage(game.background, 0, 0);
-  player.render(elapsedTime, ctx);
+	ctx.drawImage(game.background, 0, 0);
+	player.render(elapsedTime, ctx);
+	semis.forEach(function(semi) {
+	semi.render(elapsedTime, ctx);
+	});
 }
