@@ -1,42 +1,40 @@
 "use strict";
 
 const MS_PER_FRAME = 1000/16;
-
+const BLINK_MS_PER_FRAME = 1000/4;
 /**
- * @module exports the Semi class
+ * @module exports the Van class
  */
-module.exports = exports = Semi;
+module.exports = exports = Van;
 
 /**
- * @constructor Semi
- * Creates a new Semi object
+ * @constructor Van
+ * Creates a new Van object
  * @param {Postition} position object specifying an x, y, and direction (-1 or 1)
  */
-function Semi(position) {
+function Van(position) {
 	this.state = "idle";
 	this.x = position.x;
 	this.y = position.y;
 	this.width  = 64;
 	this.height = 192;
 	this.spritesheet  = new Image();
-	this.spritesheet.src = 'assets/semi_sprites.png';
-	this.timer = 0;
-	this.frame = 0;
+	this.spritesheet.src = 'assets/van_sprites.png';
 
-	this.speed = 0.5;
+	this.speed = 0.7;
 	this.direction = position.direction;
 }
 
-Semi.prototype.nextLevel = function()
+Van.prototype.nextLevel = function()
 {
 	this.speed *= 1.5;
 }
 
 /**
- * @function updates the Semi object
+ * @function updates the Van object
  * {DOMHighResTimeStamp} time the elapsed time since the last frame
  */
-Semi.prototype.update = function(time) {
+Van.prototype.update = function(time) {
 
 	/*this.timer += time;
 	if(this.timer > MS_PER_FRAME) {
@@ -48,11 +46,11 @@ Semi.prototype.update = function(time) {
 }
 
 /**
- * @function renders the Semi into the provided context
+ * @function renders the Van into the provided context
  * {DOMHighResTimeStamp} time the elapsed time since the last frame
  * {CanvasRenderingContext2D} ctx the context to render into
  */
-Semi.prototype.render = function(time, ctx) {
+Van.prototype.render = function(time, ctx) {
 	ctx.drawImage(
 	// image
 	this.spritesheet,

@@ -3,61 +3,54 @@
 const MS_PER_FRAME = 1000/16;
 
 /**
- * @module exports the Semi class
+ * @module exports the Mini class
  */
-module.exports = exports = Semi;
+module.exports = exports = Mini;
 
 /**
- * @constructor Semi
- * Creates a new Semi object
+ * @constructor Mini
+ * Creates a new Mini object
  * @param {Postition} position object specifying an x, y, and direction (-1 or 1)
  */
-function Semi(position) {
+function Mini(position) {
 	this.state = "idle";
 	this.x = position.x;
 	this.y = position.y;
 	this.width  = 64;
-	this.height = 192;
+	this.height = 64;
 	this.spritesheet  = new Image();
-	this.spritesheet.src = 'assets/semi_sprites.png';
-	this.timer = 0;
-	this.frame = 0;
+	this.spritesheet.src = 'assets/mini_sprites.png';
 
-	this.speed = 0.5;
+	this.speed = 2;
 	this.direction = position.direction;
+	if(this.direction == 1)this.frame = 0;
+	else this.frame = 1;
 }
 
-Semi.prototype.nextLevel = function()
+Mini.prototype.nextLevel = function()
 {
 	this.speed *= 1.5;
 }
 
 /**
- * @function updates the Semi object
+ * @function updates the Mini object
  * {DOMHighResTimeStamp} time the elapsed time since the last frame
  */
-Semi.prototype.update = function(time) {
-
-	/*this.timer += time;
-	if(this.timer > MS_PER_FRAME) {
-		this.timer = 0;
-		this.frame += 1;
-		if(this.frame > 3) this.frame = 0;
-	}*/
+Mini.prototype.update = function(time) {
 	this.y += this.direction * this.speed * this.height * time/1000;
 }
 
 /**
- * @function renders the Semi into the provided context
+ * @function renders the Mini into the provided context
  * {DOMHighResTimeStamp} time the elapsed time since the last frame
  * {CanvasRenderingContext2D} ctx the context to render into
  */
-Semi.prototype.render = function(time, ctx) {
+Mini.prototype.render = function(time, ctx) {
 	ctx.drawImage(
 	// image
 	this.spritesheet,
 	// source rectangle
-	0, 0, this.width, this.height,
+	this.frame * 64, 0, this.width, this.height,
 	// destination rectangle
 	this.x, this.y, this.width, this.height
 	);

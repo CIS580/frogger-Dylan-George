@@ -23,7 +23,6 @@ function Player(position) {
 	this.timer = 0;
 	this.frame = 0;
 
-	
 	this.speed = 4;
 	this.moveTimer = 0;	
 	this.moveDelayTime = 150;	
@@ -35,7 +34,8 @@ function Player(position) {
 	this.blinkDelay = 0;
 	this.blinkTimer = 0;
 	this.blinkFrame = 0;
-	
+	this.directionFrame = 0;
+	this.nextDirectionFrame = 0;
 	//Which direction is it hopping
 	this.currentDirection = 
 	{
@@ -65,10 +65,12 @@ function Player(position) {
 				if (!self.stillMoving) 
 				{
 					self.currentDirection.up = true;
+					self.directionFrame = 3;
 					self.stillMoving = true;
 					self.state = "moving";
 				}
 				self.nextDirection.up = true;
+				self.nextDirectionFrame = 3;
 				self.movingAgain = true;
 				event.preventDefault();
 				break;
@@ -78,10 +80,12 @@ function Player(position) {
 				if (!self.stillMoving) 
 				{
 					self.currentDirection.down = true;
+					self.directionFrame = 1;
 					self.stillMoving = true;
 					self.state = "moving";
 				}
 				self.nextDirection.down = true;
+				self.nextDirectionFrame = 1
 				self.movingAgain = true;
 				event.preventDefault();
 				break;
@@ -91,10 +95,12 @@ function Player(position) {
 				if (!self.stillMoving) 
 				{
 					self.currentDirection.left = true;
+					self.directionFrame = 2;
 					self.stillMoving = true;
 					self.state = "moving";
 				}
 				self.nextDirection.left = true;
+				self.nextDirectionFrame = 2;
 				self.movingAgain = true;
 				event.preventDefault();
 				break;
@@ -104,10 +110,12 @@ function Player(position) {
 				if (!self.stillMoving) 
 				{
 					self.currentDirection.right = true;
+					self.directionFrame = 0;
 					self.stillMoving = true;
 					self.state = "moving";
 				}
 				self.nextDirection.right = true;
+				self.nextDirectionFrame = 0;
 				self.movingAgain = true;
 				event.preventDefault();
 				break;
@@ -121,7 +129,9 @@ function Player(position) {
 			//up
 			case 38:
 			case 87:
+				console.log(self.directionFrame);
 				self.nextDirection.up = false;
+				self.nextDirectionFrame = self.directionFrame;
 				self.movingAgain = false;
 				event.preventDefault();
 				break;
@@ -129,6 +139,7 @@ function Player(position) {
 			case 40:
 			case 83:
 				self.nextDirection.down = false;
+				self.nextDirectionFrame = self.directionFrame;
 				self.movingAgain = false;
 				event.preventDefault();
 				break;
@@ -136,6 +147,7 @@ function Player(position) {
 			case 37:
 			case 65:
 				self.nextDirection.left = false;
+				self.nextDirectionFrame = self.directionFrame;
 				self.movingAgain = false;
 				event.preventDefault();
 				break;
@@ -143,6 +155,7 @@ function Player(position) {
 			case 39:
 			case 68:
 				self.nextDirection.right = false;
+				self.nextDirectionFrame = self.directionFrame;
 				self.movingAgain = false;
 				event.preventDefault();
 				break;
@@ -209,6 +222,7 @@ Player.prototype.update = function(time) {
 			this.currentDirection.down = this.nextDirection.down;
 			this.currentDirection.left = this.nextDirection.left;
 			this.currentDirection.right = this.nextDirection.right;
+			this.directionFrame = this.nextDirectionFrame;
 		}
  
 		break;
@@ -223,14 +237,13 @@ Player.prototype.update = function(time) {
  * {CanvasRenderingContext2D} ctx the context to render into
  */
 Player.prototype.render = function(time, ctx) {
-
   switch(this.state) {
     case "idle":
 		ctx.drawImage(
 		// image
 		this.spritesheet,
 		// source rectangle
-		this.blinkFrame * 64, 64, this.width, this.height,
+		this.directionFrame * 256 + this.blinkFrame * 64, 64, this.width, this.height,
 		// destination rectangle
 		this.x, this.y, this.width, this.height
 		);
@@ -240,7 +253,7 @@ Player.prototype.render = function(time, ctx) {
         // image
         this.spritesheet,
         // source rectangle
-		this.frame * 64, 0, this.width, this.height,
+		this.directionFrame * 256 + this.frame * 64, 0, this.width, this.height,
         // destination rectangle
         this.x, this.y, this.width, this.height
       );

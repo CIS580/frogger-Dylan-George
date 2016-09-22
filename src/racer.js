@@ -1,63 +1,55 @@
 "use strict";
 
 const MS_PER_FRAME = 1000/16;
-
+const BLINK_MS_PER_FRAME = 1000/4;
 /**
- * @module exports the Semi class
+ * @module exports the Racer class
  */
-module.exports = exports = Semi;
+module.exports = exports = Racer;
 
 /**
- * @constructor Semi
- * Creates a new Semi object
+ * @constructor Racer
+ * Creates a new Racer object
  * @param {Postition} position object specifying an x, y, and direction (-1 or 1)
  */
-function Semi(position) {
-	this.state = "idle";
+function Racer(position) {
 	this.x = position.x;
 	this.y = position.y;
 	this.width  = 64;
-	this.height = 192;
+	this.height = 64;
 	this.spritesheet  = new Image();
-	this.spritesheet.src = 'assets/semi_sprites.png';
-	this.timer = 0;
-	this.frame = 0;
-
-	this.speed = 0.5;
+	this.spritesheet.src = 'assets/racer_sprites.png';
+	
+	this.speed = 3;
 	this.direction = position.direction;
+	if(this.direction == 1)this.frame = 0;
+	else this.frame = 1;
 }
 
-Semi.prototype.nextLevel = function()
+Racer.prototype.nextLevel = function()
 {
 	this.speed *= 1.5;
 }
 
 /**
- * @function updates the Semi object
+ * @function updates the Racer object
  * {DOMHighResTimeStamp} time the elapsed time since the last frame
  */
-Semi.prototype.update = function(time) {
-
-	/*this.timer += time;
-	if(this.timer > MS_PER_FRAME) {
-		this.timer = 0;
-		this.frame += 1;
-		if(this.frame > 3) this.frame = 0;
-	}*/
+Racer.prototype.update = function(time) {
 	this.y += this.direction * this.speed * this.height * time/1000;
 }
 
 /**
- * @function renders the Semi into the provided context
+ * @function renders the Racer into the provided context
  * {DOMHighResTimeStamp} time the elapsed time since the last frame
  * {CanvasRenderingContext2D} ctx the context to render into
  */
-Semi.prototype.render = function(time, ctx) {
+Racer.prototype.render = function(time, ctx) {
 	ctx.drawImage(
 	// image
 	this.spritesheet,
 	// source rectangle
-	0, 0, this.width, this.height,
+	this.frame*64, 0, this.width, this.height,
 	// destination rectangle
 	this.x, this.y, this.width, this.height
 	);
