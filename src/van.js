@@ -13,7 +13,6 @@ module.exports = exports = Van;
  * @param {Postition} position object specifying an x, y, and direction (-1 or 1)
  */
 function Van(position) {
-	this.state = "idle";
 	this.x = position.x;
 	this.y = position.y;
 	this.width  = 64;
@@ -21,6 +20,7 @@ function Van(position) {
 	this.spritesheet  = new Image();
 	this.spritesheet.src = 'assets/van_sprites.png';
 
+	this.name = "car";
 	this.speed = 0.7;
 	this.direction = position.direction;
 }

@@ -13,7 +13,6 @@ module.exports = exports = Semi;
  * @param {Postition} position object specifying an x, y, and direction (-1 or 1)
  */
 function Semi(position) {
-	this.state = "idle";
 	this.x = position.x;
 	this.y = position.y;
 	this.width  = 64;
@@ -23,6 +22,7 @@ function Semi(position) {
 	this.timer = 0;
 	this.frame = 0;
 
+	this.name = "car";
 	this.speed = 0.5;
 	this.direction = position.direction;
 }

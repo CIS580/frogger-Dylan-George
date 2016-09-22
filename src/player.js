@@ -2,6 +2,7 @@
 
 const MS_PER_FRAME = 1000/16;
 const BLINK_MS_PER_FRAME = 1000/4;
+const DEATH_MS_PER_FRAME = 1000/6;
 /**
  * @module exports the Player class
  */
@@ -23,6 +24,7 @@ function Player(position) {
 	this.timer = 0;
 	this.frame = 0;
 
+	this.name = "player";
 	this.speed = 4;
 	this.moveTimer = 0;	
 	this.moveDelayTime = 150;	
@@ -34,8 +36,15 @@ function Player(position) {
 	this.blinkDelay = 0;
 	this.blinkTimer = 0;
 	this.blinkFrame = 0;
+	
+	//Frame modifiers for directional sprites
 	this.directionFrame = 0;
 	this.nextDirectionFrame = 0;
+	
+	//Variables for death animation
+	this.deathTimer = 0;
+	this.deathFrame = 0;
+	
 	//Which direction is it hopping
 	this.currentDirection = 
 	{
@@ -57,66 +66,79 @@ function Player(position) {
 	var self = this;
 	window.onkeydown = function(event)
 	{
+
 		switch(event.keyCode)
 		{
 			//up
 			case 38:
 			case 87:
-				if (!self.stillMoving) 
+				if(!(self.state == "dying") && !(self.state == "dead"))
 				{
-					self.currentDirection.up = true;
-					self.directionFrame = 3;
-					self.stillMoving = true;
-					self.state = "moving";
+					if (!self.stillMoving) 
+					{
+						self.currentDirection.up = true;
+						self.directionFrame = 3;
+						self.stillMoving = true;
+						self.state = "moving";
+					}
+					self.nextDirection.up = true;
+					self.nextDirectionFrame = 3;
+					self.movingAgain = true;
 				}
-				self.nextDirection.up = true;
-				self.nextDirectionFrame = 3;
-				self.movingAgain = true;
 				event.preventDefault();
 				break;
 			//down
 			case 40:
 			case 83:
-				if (!self.stillMoving) 
+				if(!(self.state == "dying") && !(self.state == "dead"))
 				{
-					self.currentDirection.down = true;
-					self.directionFrame = 1;
-					self.stillMoving = true;
-					self.state = "moving";
+					if (!self.stillMoving) 
+					{
+						self.currentDirection.down = true;
+						self.directionFrame = 1;
+						self.stillMoving = true;
+						self.state = "moving";
+					}
+					self.nextDirection.down = true;
+					self.nextDirectionFrame = 1
+					self.movingAgain = true;
 				}
-				self.nextDirection.down = true;
-				self.nextDirectionFrame = 1
-				self.movingAgain = true;
 				event.preventDefault();
 				break;
 			//left
 			case 37:
 			case 65:
-				if (!self.stillMoving) 
+				if(!(self.state == "dying") && !(self.state == "dead"))
 				{
-					self.currentDirection.left = true;
-					self.directionFrame = 2;
-					self.stillMoving = true;
-					self.state = "moving";
+					if (!self.stillMoving) 
+					{
+						self.currentDirection.left = true;
+						self.directionFrame = 2;
+						self.stillMoving = true;
+						self.state = "moving";
+					}
+					self.nextDirection.left = true;
+					self.nextDirectionFrame = 2;
+					self.movingAgain = true;
 				}
-				self.nextDirection.left = true;
-				self.nextDirectionFrame = 2;
-				self.movingAgain = true;
 				event.preventDefault();
 				break;
 			//right
 			case 39:
 			case 68:
-				if (!self.stillMoving) 
+				if(!(self.state == "dying") && !(self.state == "dead"))
 				{
-					self.currentDirection.right = true;
-					self.directionFrame = 0;
-					self.stillMoving = true;
-					self.state = "moving";
+					if (!self.stillMoving) 
+					{
+						self.currentDirection.right = true;
+						self.directionFrame = 0;
+						self.stillMoving = true;
+						self.state = "moving";
+					}
+					self.nextDirection.right = true;
+					self.nextDirectionFrame = 0;
+					self.movingAgain = true;
 				}
-				self.nextDirection.right = true;
-				self.nextDirectionFrame = 0;
-				self.movingAgain = true;
 				event.preventDefault();
 				break;
 		}
@@ -129,7 +151,6 @@ function Player(position) {
 			//up
 			case 38:
 			case 87:
-				console.log(self.directionFrame);
 				self.nextDirection.up = false;
 				self.nextDirectionFrame = self.directionFrame;
 				self.movingAgain = false;
@@ -164,7 +185,23 @@ function Player(position) {
 
 }
 
-
+Player.prototype.newPlayer = function()
+{
+	this.x = 0;
+	this.y = 256;
+	this.state = "idle";
+	this.moveTimer = 0;	
+	this.moveDelayTime = 150;	
+	this.stillMoving = false;
+	this.movingAgain = false;
+	this.blinkDelay = 0;
+	this.blinkTimer = 0;
+	this.blinkFrame = 0;
+	this.directionFrame = 0;
+	this.nextDirectionFrame = 0;
+	this.deathTimer = 0;
+	this.deathFrame = 0;
+}
 
 /**
  * @function updates the player object
@@ -172,7 +209,7 @@ function Player(position) {
  */
 Player.prototype.update = function(time) {
 
-
+console.log(this.x);
   switch(this.state) {
     case "idle":
 		if(this.movingAgain) this.state = "moving";
@@ -205,10 +242,11 @@ Player.prototype.update = function(time) {
 				this.frame += 1;
 				if(this.frame > 3) this.frame = 0;
 			}
-			if(this.currentDirection.up) this.y -= this.speed * this.height * time/1000;
-			else if(this.currentDirection.down) this.y += this.speed * this.height * time/1000;
-			else if(this.currentDirection.right) this.x += this.speed * this.width * time/1000;
-			else if(this.currentDirection.left) this.x -=  this.speed * this.width * time/1000;
+			
+			if(this.currentDirection.up && !(this.y == 0)) this.y -= this.speed * this.height * time/1000;
+			else if(this.currentDirection.down && !(this.y == 640)) this.y += this.speed * this.height * time/1000;
+			else if(this.currentDirection.right && !(this.x == 768)) this.x += this.speed * this.width * time/1000;
+			else if(this.currentDirection.left && !(this.x == 0)) this.x -=  this.speed * this.width * time/1000;
 		}
 		else if (this.moveTimer < (1000/this.speed) + this.moveDelayTime) this.frame = 0;
 		else 
@@ -217,7 +255,9 @@ Player.prototype.update = function(time) {
 			this.moveTimer = 0;
 			this.state = "idle";
 			this.timer = 0;
-			
+			//Account for fractional difference between x and what x should actually be
+			this.x = Math.round(this.x);
+			this.y = Math.round(this.y);
 			this.currentDirection.up = this.nextDirection.up;
 			this.currentDirection.down = this.nextDirection.down;
 			this.currentDirection.left = this.nextDirection.left;
@@ -226,7 +266,18 @@ Player.prototype.update = function(time) {
 		}
  
 		break;
-    // TODO: Implement your player's update by state
+    case "dying":
+		this.deathTimer += time;
+		if(this.deathTimer > DEATH_MS_PER_FRAME) {
+			this.deathTimer = 0;
+			this.deathFrame += 1;
+			if(this.deathFrame > 4) 
+			{
+				this.deathFrame = 0;
+				this.state = "dead";
+			}
+		}
+		break;
   }
   
 }
@@ -258,6 +309,17 @@ Player.prototype.render = function(time, ctx) {
         this.x, this.y, this.width, this.height
       );
       break;
-    // TODO: Implement your player's rendering according to state
+    case "dying":
+		ctx.drawImage(
+        // image
+        this.spritesheet,
+        // source rectangle
+		this.deathFrame * 64, 128, this.width, this.height,
+        // destination rectangle
+        this.x, this.y, this.width, this.height
+      );
+      break;
+	case "dead":
+		break;
   }
 }

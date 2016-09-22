@@ -13,7 +13,6 @@ module.exports = exports = Mini;
  * @param {Postition} position object specifying an x, y, and direction (-1 or 1)
  */
 function Mini(position) {
-	this.state = "idle";
 	this.x = position.x;
 	this.y = position.y;
 	this.width  = 64;
@@ -21,6 +20,7 @@ function Mini(position) {
 	this.spritesheet  = new Image();
 	this.spritesheet.src = 'assets/mini_sprites.png';
 
+	this.name = "car";
 	this.speed = 2;
 	this.direction = position.direction;
 	if(this.direction == 1)this.frame = 0;

@@ -20,6 +20,7 @@ function Racer(position) {
 	this.spritesheet  = new Image();
 	this.spritesheet.src = 'assets/racer_sprites.png';
 	
+	this.name = "car";
 	this.speed = 3;
 	this.direction = position.direction;
 	if(this.direction == 1)this.frame = 0;
