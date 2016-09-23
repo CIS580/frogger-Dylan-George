@@ -1,53 +1,51 @@
 "use strict";
 
-const MS_PER_FRAME = 1000/16;
-
 /**
- * @module exports the Semi class
+ * @module exports the FullLog class
  */
-module.exports = exports = Semi;
+module.exports = exports = FullLog;
 
 /**
- * @constructor Semi
- * Creates a new Semi object
+ * @constructor FullLog
+ * Creates a new FullLog object
  * @param {Postition} position object specifying an x, y, and direction (-1 or 1)
  */
-function Semi(position) {
+function FullLog(position) {
 	this.x = position.x;
 	this.y = position.y;
 	this.width  = 64;
 	this.height = 192;
 	this.spritesheet  = new Image();
-	this.spritesheet.src = 'assets/semi_sprites.png';
+	this.spritesheet.src = 'assets/long_log_sprites.png';
 	this.timer = 0;
 	this.frame = 0;
 
-	this.name = "car";
-	this.speed = 10;
+	this.name = "log";
+	this.speed = 7;
 	this.direction = position.direction;
 	this.destroy = false;
 }
 
-Semi.prototype.nextLevel = function()
+FullLog.prototype.nextLevel = function()
 {
 	this.speed *= 1.5;
 }
 
 /**
- * @function updates the Semi object
+ * @function updates the FullLog object
  * {DOMHighResTimeStamp} time the elapsed time since the last frame
  */
-Semi.prototype.update = function(time) {
+FullLog.prototype.update = function(time) {
 	this.y += this.direction * this.speed * time/100;
-	if(this.y > 704) this.destroy = true;
+	if(this.y < -192) this.destroy = true;
 }
 
 /**
- * @function renders the Semi into the provided context
+ * @function renders the FullLog into the provided context
  * {DOMHighResTimeStamp} time the elapsed time since the last frame
  * {CanvasRenderingContext2D} ctx the context to render into
  */
-Semi.prototype.render = function(time, ctx) {
+FullLog.prototype.render = function(time, ctx) {
 	ctx.drawImage(
 	// image
 	this.spritesheet,

@@ -21,8 +21,9 @@ function Mini(position) {
 	this.spritesheet.src = 'assets/mini_sprites.png';
 
 	this.name = "car";
-	this.speed = 2;
+	this.speed = 20;
 	this.direction = position.direction;
+	this.destroy = false;
 	if(this.direction == 1)this.frame = 0;
 	else this.frame = 1;
 }
@@ -37,7 +38,8 @@ Mini.prototype.nextLevel = function()
  * {DOMHighResTimeStamp} time the elapsed time since the last frame
  */
 Mini.prototype.update = function(time) {
-	this.y += this.direction * this.speed * this.height * time/1000;
+	this.y += this.direction * this.speed * time/100;
+	if((this.direction == -1 && this.y < -64) || this.direction == 1 && this.y > 704) this.destroy = true;
 }
 
 /**

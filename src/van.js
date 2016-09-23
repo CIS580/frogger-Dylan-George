@@ -16,13 +16,14 @@ function Van(position) {
 	this.x = position.x;
 	this.y = position.y;
 	this.width  = 64;
-	this.height = 192;
+	this.height = 128;
 	this.spritesheet  = new Image();
 	this.spritesheet.src = 'assets/van_sprites.png';
 
 	this.name = "car";
-	this.speed = 0.7;
+	this.speed = 15;
 	this.direction = position.direction;
+	this.destroy = false;
 }
 
 Van.prototype.nextLevel = function()
@@ -35,14 +36,8 @@ Van.prototype.nextLevel = function()
  * {DOMHighResTimeStamp} time the elapsed time since the last frame
  */
 Van.prototype.update = function(time) {
-
-	/*this.timer += time;
-	if(this.timer > MS_PER_FRAME) {
-		this.timer = 0;
-		this.frame += 1;
-		if(this.frame > 3) this.frame = 0;
-	}*/
-	this.y += this.direction * this.speed * this.height * time/1000;
+	this.y += this.direction * this.speed * time/100;
+	if(this.y > 704) this.destroy = true;
 }
 
 /**

@@ -26,6 +26,7 @@ function Player(position) {
 
 	this.name = "player";
 	this.speed = 4;
+
 	this.moveTimer = 0;	
 	this.moveDelayTime = 150;	
 	//Is it finishing a hop
@@ -44,6 +45,11 @@ function Player(position) {
 	//Variables for death animation
 	this.deathTimer = 0;
 	this.deathFrame = 0;
+	
+	this.isFloating = false;
+	this.floatSpeed = 0;
+	
+	this.collision = false;
 	
 	//Which direction is it hopping
 	this.currentDirection = 
@@ -188,7 +194,7 @@ function Player(position) {
 Player.prototype.newPlayer = function()
 {
 	this.x = 0;
-	this.y = 256;
+	this.y = 320;
 	this.state = "idle";
 	this.moveTimer = 0;	
 	this.moveDelayTime = 150;	
@@ -201,6 +207,7 @@ Player.prototype.newPlayer = function()
 	this.nextDirectionFrame = 0;
 	this.deathTimer = 0;
 	this.deathFrame = 0;
+	this.isFloating = false;
 }
 
 /**
@@ -208,10 +215,9 @@ Player.prototype.newPlayer = function()
  * {DOMHighResTimeStamp} time the elapsed time since the last frame
  */
 Player.prototype.update = function(time) {
-
-console.log(this.x);
   switch(this.state) {
-    case "idle":
+	case "idle":
+		if(this.isFloating) this.y += this.floatSpeed;
 		if(this.movingAgain) this.state = "moving";
 		else
 		{
@@ -243,10 +249,21 @@ console.log(this.x);
 				if(this.frame > 3) this.frame = 0;
 			}
 			
-			if(this.currentDirection.up && !(this.y == 0)) this.y -= this.speed * this.height * time/1000;
-			else if(this.currentDirection.down && !(this.y == 640)) this.y += this.speed * this.height * time/1000;
-			else if(this.currentDirection.right && !(this.x == 768)) this.x += this.speed * this.width * time/1000;
-			else if(this.currentDirection.left && !(this.x == 0)) this.x -=  this.speed * this.width * time/1000;
+			if(!this.isFloating)
+			{
+				if(this.currentDirection.up && !(this.y == 0)) this.y -= this.speed * this.height * time/1000;
+				else if(this.currentDirection.down && !(this.y == 640)) this.y += this.speed * this.height * time/1000;
+				else if(this.currentDirection.right && !(this.x == 768)) this.x += this.speed * this.width * time/1000;
+				else if(this.currentDirection.left && !(this.x == 0)) this.x -=  this.speed * this.width * time/1000;
+			}
+			else
+			{
+				this.isFloating = false;
+				if(this.currentDirection.up && !(this.y == 0)) this.y -= (this.speed * this.height * time/1000 - this.floatSpeed);
+				else if(this.currentDirection.down && !(this.y == 640)) this.y += (this.speed * this.height * time/1000 + this.floatSpeed);
+				else if(this.currentDirection.right && !(this.x == 768)) this.x += this.speed * this.width * time/1000;
+				else if(this.currentDirection.left && !(this.x == 0)) this.x -=  this.speed * this.width * time/1000;
+			}
 		}
 		else if (this.moveTimer < (1000/this.speed) + this.moveDelayTime) this.frame = 0;
 		else 
@@ -311,13 +328,13 @@ Player.prototype.render = function(time, ctx) {
       break;
     case "dying":
 		ctx.drawImage(
-        // image
-        this.spritesheet,
-        // source rectangle
+		// image
+		this.spritesheet,
+		// source rectangle
 		this.deathFrame * 64, 128, this.width, this.height,
-        // destination rectangle
-        this.x, this.y, this.width, this.height
-      );
+		// destination rectangle
+		this.x, this.y, this.width, this.height
+		);
       break;
 	case "dead":
 		break;

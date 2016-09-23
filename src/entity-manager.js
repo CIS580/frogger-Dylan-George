@@ -25,14 +25,14 @@ function getIndex(x, y) {
 }
 
 EntityManager.prototype.addEntity = function(entity){
-  var index = getIndex.call(this, entity.x, entity.y);
+  var index = getIndex.call(this, entity.x + entity.width/2, entity.y + entity.height/2);
   this.cells[index].push(entity);
   entity._cell = index;
 }
 
 EntityManager.prototype.updateEntity = function(entity){
 
-  var index = getIndex.call(this, entity.x, entity.y);
+  var index = getIndex.call(this, entity.x + entity.width/2, entity.y + entity.height/2);
   // If we moved to a new cell, remove from old and add to new
   if(index != entity._cell) {
     var cellIndex = this.cells[entity._cell].indexOf(entity);
@@ -49,7 +49,6 @@ EntityManager.prototype.removeEntity = function(entity) {
 }
 
 EntityManager.prototype.collide = function(callback) {
-  var self = this;
   this.cells.forEach(function(cell) {
     // test for collisions
     cell.forEach(function(entity1) {
@@ -62,12 +61,13 @@ EntityManager.prototype.collide = function(callback) {
   });
 }
 
+//The collision boxes have a slight padding so collisions feel more fair
 function checkForCollision(entity1, entity2, callback) {
-  var collides = !(entity1.x + entity1.width < entity2.x ||
-                   entity1.x > entity2.x + entity2.width ||
-                   entity1.y + entity1.height < entity2.y ||
-                   entity1.y > entity2.y + entity2.height);
+  var collides = !(entity1.x + entity1.width - 10 < entity2.x ||
+                   entity1.x > entity2.x + entity2.width - 10 ||
+                   entity1.y + entity1.height - 10 < entity2.y ||
+                   entity1.y > entity2.y + entity2.height - 10);
   if(collides) {
     callback(entity1, entity2);
   }
-}
+} 

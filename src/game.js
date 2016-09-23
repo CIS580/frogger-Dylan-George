@@ -12,7 +12,7 @@ module.exports = exports = Game;
  * @param {function} updateFunction function to update the game
  * @param {function} renderFunction function to render the game
  */
-function Game(screen, updateFunction, renderFunction) {
+function Game(screen, instructions, updateFunction, renderFunction) {
   this.update = updateFunction;
   this.render = renderFunction;
 

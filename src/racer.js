@@ -21,8 +21,9 @@ function Racer(position) {
 	this.spritesheet.src = 'assets/racer_sprites.png';
 	
 	this.name = "car";
-	this.speed = 3;
+	this.speed = 30;
 	this.direction = position.direction;
+	this.destroy = false;
 	if(this.direction == 1)this.frame = 0;
 	else this.frame = 1;
 }
@@ -37,7 +38,8 @@ Racer.prototype.nextLevel = function()
  * {DOMHighResTimeStamp} time the elapsed time since the last frame
  */
 Racer.prototype.update = function(time) {
-	this.y += this.direction * this.speed * this.height * time/1000;
+	this.y += this.direction * this.speed * time/100;
+	if((this.direction == -1 && this.y < -64) || this.direction == 1 && this.y > 704) this.destroy = true;
 }
 
 /**
