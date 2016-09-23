@@ -10,25 +10,19 @@ module.exports = exports = FullLog;
  * Creates a new FullLog object
  * @param {Postition} position object specifying an x, y, and direction (-1 or 1)
  */
-function FullLog(position) {
+function FullLog(position, speedMultiplier) {
 	this.x = position.x;
 	this.y = position.y;
 	this.width  = 64;
 	this.height = 192;
 	this.spritesheet  = new Image();
 	this.spritesheet.src = 'assets/long_log_sprites.png';
-	this.timer = 0;
-	this.frame = 0;
 
 	this.name = "log";
 	this.speed = 7;
+	this.speedMultiplier = speedMultiplier;
 	this.direction = position.direction;
 	this.destroy = false;
-}
-
-FullLog.prototype.nextLevel = function()
-{
-	this.speed *= 1.5;
 }
 
 /**
@@ -36,7 +30,7 @@ FullLog.prototype.nextLevel = function()
  * {DOMHighResTimeStamp} time the elapsed time since the last frame
  */
 FullLog.prototype.update = function(time) {
-	this.y += this.direction * this.speed * time/100;
+	this.y += this.direction * this.speed * this.speedMultiplier * time/100;
 	if(this.y < -192) this.destroy = true;
 }
 

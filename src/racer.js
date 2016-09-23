@@ -12,7 +12,7 @@ module.exports = exports = Racer;
  * Creates a new Racer object
  * @param {Postition} position object specifying an x, y, and direction (-1 or 1)
  */
-function Racer(position) {
+function Racer(position, speedMultiplier) {
 	this.x = position.x;
 	this.y = position.y;
 	this.width  = 64;
@@ -22,6 +22,7 @@ function Racer(position) {
 	
 	this.name = "car";
 	this.speed = 30;
+	this.speedMultiplier = speedMultiplier;
 	this.direction = position.direction;
 	this.destroy = false;
 	if(this.direction == 1)this.frame = 0;
@@ -38,7 +39,7 @@ Racer.prototype.nextLevel = function()
  * {DOMHighResTimeStamp} time the elapsed time since the last frame
  */
 Racer.prototype.update = function(time) {
-	this.y += this.direction * this.speed * time/100;
+	this.y += this.direction * this.speed * this.speedMultiplier * time/100;
 	if((this.direction == -1 && this.y < -64) || this.direction == 1 && this.y > 704) this.destroy = true;
 }
 

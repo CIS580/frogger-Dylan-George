@@ -72,81 +72,92 @@ function Player(position) {
 	var self = this;
 	window.onkeydown = function(event)
 	{
-
-		switch(event.keyCode)
+		//Space to restart
+		if(event.keyCode == 32)
+		{	
+			if(self.state == "game over")
+			{
+				self.state = "restart";
+			}
+			event.preventDefault();
+		}
+		if(self.state != "game over")
 		{
-			//up
-			case 38:
-			case 87:
-				if(!(self.state == "dying") && !(self.state == "dead"))
-				{
-					if (!self.stillMoving) 
+			switch(event.keyCode)
+			{
+				//up
+				case 38:
+				case 87:
+					if(!(self.state == "dying") && !(self.state == "dead"))
 					{
-						self.currentDirection.up = true;
-						self.directionFrame = 3;
-						self.stillMoving = true;
-						self.state = "moving";
+						if (!self.stillMoving) 
+						{
+							self.currentDirection.up = true;
+							self.directionFrame = 3;
+							self.stillMoving = true;
+							self.state = "moving";
+						}
+						self.nextDirection.up = true;
+						self.nextDirectionFrame = 3;
+						self.movingAgain = true;
 					}
-					self.nextDirection.up = true;
-					self.nextDirectionFrame = 3;
-					self.movingAgain = true;
-				}
-				event.preventDefault();
-				break;
-			//down
-			case 40:
-			case 83:
-				if(!(self.state == "dying") && !(self.state == "dead"))
-				{
-					if (!self.stillMoving) 
+					event.preventDefault();
+					break;
+				//down
+				case 40:
+				case 83:
+					if(!(self.state == "dying") && !(self.state == "dead"))
 					{
-						self.currentDirection.down = true;
-						self.directionFrame = 1;
-						self.stillMoving = true;
-						self.state = "moving";
+						if (!self.stillMoving) 
+						{
+							self.currentDirection.down = true;
+							self.directionFrame = 1;
+							self.stillMoving = true;
+							self.state = "moving";
+						}
+						self.nextDirection.down = true;
+						self.nextDirectionFrame = 1
+						self.movingAgain = true;
 					}
-					self.nextDirection.down = true;
-					self.nextDirectionFrame = 1
-					self.movingAgain = true;
-				}
-				event.preventDefault();
-				break;
-			//left
-			case 37:
-			case 65:
-				if(!(self.state == "dying") && !(self.state == "dead"))
-				{
-					if (!self.stillMoving) 
+					event.preventDefault();
+					break;
+				//left
+				case 37:
+				case 65:
+					if(!(self.state == "dying") && !(self.state == "dead"))
 					{
-						self.currentDirection.left = true;
-						self.directionFrame = 2;
-						self.stillMoving = true;
-						self.state = "moving";
+						if (!self.stillMoving) 
+						{
+							self.currentDirection.left = true;
+							self.directionFrame = 2;
+							self.stillMoving = true;
+							self.state = "moving";
+						}
+						self.nextDirection.left = true;
+						self.nextDirectionFrame = 2;
+						self.movingAgain = true;
 					}
-					self.nextDirection.left = true;
-					self.nextDirectionFrame = 2;
-					self.movingAgain = true;
-				}
-				event.preventDefault();
-				break;
-			//right
-			case 39:
-			case 68:
-				if(!(self.state == "dying") && !(self.state == "dead"))
-				{
-					if (!self.stillMoving) 
+					event.preventDefault();
+					break;
+				//right
+				case 39:
+				case 68:
+					if(!(self.state == "dying") && !(self.state == "dead"))
 					{
-						self.currentDirection.right = true;
-						self.directionFrame = 0;
-						self.stillMoving = true;
-						self.state = "moving";
+						if (!self.stillMoving) 
+						{
+							self.currentDirection.right = true;
+							self.directionFrame = 0;
+							self.stillMoving = true;
+							self.state = "moving";
+						}
+						self.nextDirection.right = true;
+						self.nextDirectionFrame = 0;
+						self.movingAgain = true;
 					}
-					self.nextDirection.right = true;
-					self.nextDirectionFrame = 0;
-					self.movingAgain = true;
-				}
-				event.preventDefault();
-				break;
+					event.preventDefault();
+					break;
+			}
 		}
 	}
 	
@@ -208,6 +219,22 @@ Player.prototype.newPlayer = function()
 	this.deathTimer = 0;
 	this.deathFrame = 0;
 	this.isFloating = false;
+	
+	this.currentDirection = 
+	{
+		up: false,
+		down: false,
+		left: false,
+		right: false
+	}
+	
+	this.currentDirection = 
+	{
+		up: false,
+		down: false,
+		left: false,
+		right: false
+	}
 }
 
 /**

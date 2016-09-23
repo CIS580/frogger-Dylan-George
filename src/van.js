@@ -12,7 +12,7 @@ module.exports = exports = Van;
  * Creates a new Van object
  * @param {Postition} position object specifying an x, y, and direction (-1 or 1)
  */
-function Van(position) {
+function Van(position, speedMultiplier) {
 	this.x = position.x;
 	this.y = position.y;
 	this.width  = 64;
@@ -22,13 +22,9 @@ function Van(position) {
 
 	this.name = "car";
 	this.speed = 15;
+	this.speedMultiplier = speedMultiplier;
 	this.direction = position.direction;
 	this.destroy = false;
-}
-
-Van.prototype.nextLevel = function()
-{
-	this.speed *= 1.5;
 }
 
 /**
@@ -36,7 +32,7 @@ Van.prototype.nextLevel = function()
  * {DOMHighResTimeStamp} time the elapsed time since the last frame
  */
 Van.prototype.update = function(time) {
-	this.y += this.direction * this.speed * time/100;
+	this.y += this.direction * this.speed * this.speedMultiplier * time/100;
 	if(this.y > 704) this.destroy = true;
 }
 

@@ -1,7 +1,5 @@
 "use strict";
 
-const MS_PER_FRAME = 1000/16;
-
 /**
  * @module exports the Semi class
  */
@@ -12,25 +10,19 @@ module.exports = exports = Semi;
  * Creates a new Semi object
  * @param {Postition} position object specifying an x, y, and direction (-1 or 1)
  */
-function Semi(position) {
+function Semi(position, speedMultiplier) {
 	this.x = position.x;
 	this.y = position.y;
 	this.width  = 64;
 	this.height = 192;
 	this.spritesheet  = new Image();
 	this.spritesheet.src = 'assets/semi_sprites.png';
-	this.timer = 0;
-	this.frame = 0;
 
 	this.name = "car";
 	this.speed = 10;
+	this.speedMultiplier = speedMultiplier;
 	this.direction = position.direction;
 	this.destroy = false;
-}
-
-Semi.prototype.nextLevel = function()
-{
-	this.speed *= 1.5;
 }
 
 /**
@@ -38,7 +30,7 @@ Semi.prototype.nextLevel = function()
  * {DOMHighResTimeStamp} time the elapsed time since the last frame
  */
 Semi.prototype.update = function(time) {
-	this.y += this.direction * this.speed * time/100;
+	this.y += this.direction * this.speed * this.speedMultiplier * time/100;
 	if(this.y > 704) this.destroy = true;
 }
 

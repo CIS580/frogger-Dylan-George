@@ -12,7 +12,7 @@ module.exports = exports = Turtle;
  * Creates a new Turtle object
  * @param {Postition} position object specifying an x, y, and direction (-1 or 1)
  */
-function Turtle(position) {
+function Turtle(position, speedMultiplier) {
 	this.x = position.x;
 	this.y = position.y;
 	this.width  = 64;
@@ -24,6 +24,7 @@ function Turtle(position) {
 
 	this.name = "turtle";
 	this.speed = 7;
+	this.speedMultiplier = speedMultiplier;
 	this.direction = position.direction;
 	this.destroy = false;
 	//Delay between dives
@@ -33,17 +34,12 @@ function Turtle(position) {
 	
 }
 
-Turtle.prototype.nextLevel = function()
-{
-	this.speed *= 1.5;
-}
-
 /**
  * @function updates the Turtle object
  * {DOMHighResTimeStamp} time the elapsed time since the last frame
  */
 Turtle.prototype.update = function(time) {
-	this.y += this.direction * this.speed * time/100;
+	this.y += this.direction * this.speed * this.speedMultiplier * time/100;
 	this.timer += time;
   switch(this.state) {
 	case "diving":
