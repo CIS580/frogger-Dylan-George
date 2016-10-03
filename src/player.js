@@ -26,7 +26,6 @@ function Player(position) {
 
 	this.name = "player";
 	this.speed = 4;
-
 	this.moveTimer = 0;	
 	this.moveDelayTime = 150;	
 	//Is it finishing a hop
@@ -266,8 +265,7 @@ Player.prototype.update = function(time) {
 		break;
 	case "moving":
 		this.moveTimer += time;
-		
-		if(this.moveTimer <= 1000/this.speed)
+		if(this.moveTimer <= 1030/this.speed)
 		{
 		    this.timer += time;
 			if(this.timer > MS_PER_FRAME) {
@@ -300,7 +298,7 @@ Player.prototype.update = function(time) {
 			this.state = "idle";
 			this.timer = 0;
 			//Account for fractional difference between x and what x should actually be
-			this.x = Math.round(this.x);
+			this.x = Math.round(this.x/64) * 64;
 			this.y = Math.round(this.y);
 			this.currentDirection.up = this.nextDirection.up;
 			this.currentDirection.down = this.nextDirection.down;
